@@ -7,6 +7,22 @@ This example is written using Java and Spring Boot.  It will run in any IDE, but
 
 Get started with a new Spring Project: [Initializr](http://start.spring.io/)
 
+We will implement a subset of the requirements stated in the book.  However, we will use modern JSON rather than the 
+XML implementation used by the authors.  Our final product will look different than theirs.
+
+For a full modern implementation of Restbucks, see Oliver Gierke's [spring-restbucks](https://github.com/olivergierke/spring-restbucks)
+project. 
+
+### Requirements
+1.  Create a new order for coffee
+1.  Monitor the status of the order
+1.  Update the order before it is finished
+1.  Cancel the order before it is finished
+1.  Pay for the order
+1.  Accept the order (i.e., take the coffee off the counter)
+
+# Technology Overview
+
 ## REST
 - Talk about what rest is and why rest
 - web services over HTTP
@@ -25,7 +41,7 @@ Get started with a new Spring Project: [Initializr](http://start.spring.io/)
  - **PUT**
  - **DELETE**
  
- ### REST Hypermedia
+  ### REST Hypermedia
 - talk about a web page - when you visit Amazon, you get to a home page
 
 ## Java Persistence (JPA)
