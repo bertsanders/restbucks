@@ -1,6 +1,8 @@
 # restbucks
 
-Much of this material is adapted from the book _[REST in Practice](https://read.amazon.com/kp/embed?asin=B0046RERXY&preview=newtab&linkCode=kpe&ref_=cm_sw_r_kb_dp_yH5LybBC9JCGM&tag=tl0a6-20)_
+Much of this material is adapted from the book 
+[_REST in Practice_]
+(https://read.amazon.com/kp/embed?asin=B0046RERXY&preview=newtab&linkCode=kpe&ref_=cm_sw_r_kb_dp_yH5LybBC9JCGM&tag=tl0a6-20)
 by Jim Webber, Savas Parastadias, and Ian Robinson.  Additional material was sourced from [Martin Fowler's web site](https://martinfowler.com).
 
 This example is written using Java and Spring Boot.  It will run in any IDE, but I recommend [IntelliJ IDEA](https://www.jetbrains.com/idea/download/)
