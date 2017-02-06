@@ -15,7 +15,7 @@ XML implementation used by the authors.  Our final product will look different t
 For a full modern implementation of Restbucks, see Oliver Gierke's [spring-restbucks](https://github.com/olivergierke/spring-restbucks)
 project. 
 
-### Requirements
+### Project Requirements
 1.  Create a new order for coffee
 1.  Monitor the status of the order
 1.  Update the order before it is finished
@@ -43,7 +43,21 @@ project.
  - **PUT**
  - **DELETE**
  
-  ### REST Hypermedia
+### REST Hypermedia
 - talk about a web page - when you visit Amazon, you get to a home page
+- define HATEOAS
+
+**See also**: [Richardson Maturity Model](https://martinfowler.com/articles/richardsonMaturityModel.html)
+
+### Spring REST Further Resources
+ - [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
+ - [Building a Hypermedia-Driven RESTful Web Service](http://spring.io/guides/gs/rest-hateoas/)
+ - [Spring-HATEOAS](http://projects.spring.io/spring-hateoas/)
 
 ## Java Persistence (JPA)
+
+### Spring JPA Further Resources
+ - [Spring Data JPA](http://projects.spring.io/spring-data-jpa/)
+ - [Accessing Data with JPA](https://spring.io/guides/gs/accessing-data-jpa/)
+ - [Spring Data Repositories - A Deep Dive by Oliver Gierke](https://speakerdeck.com/olivergierke/spring-data-repositories-a-deep-dive-2)
+ - [Spring Data](http://projects.spring.io/spring-data/) - includes modules for MongoDB, CouchBase, Hadoop, and more!
