@@ -16,12 +16,13 @@ For a full modern implementation of Restbucks, see Oliver Gierke's [spring-restb
 project. 
 
 ### Project Requirements
-1.  Create a new order for coffee
-1.  Monitor the status of the order
-1.  Update the order before it is finished
-1.  Cancel the order before it is finished
-1.  Pay for the order
-1.  Accept the order (i.e., take the coffee off the counter)
+1.  Create a new customerOrder for coffee
+1.  Show all the orders
+1.  Monitor the status of the customerOrder
+1.  Update the customerOrder before it is finished
+1.  Cancel the customerOrder before it is finished
+1.  Pay for the customerOrder
+1.  Accept the customerOrder (i.e., take the coffee off the counter)
 
 # Technology Overview
 

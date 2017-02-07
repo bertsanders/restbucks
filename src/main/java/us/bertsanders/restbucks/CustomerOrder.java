@@ -10,7 +10,7 @@ import javax.persistence.Id;
  */
 
 @Entity
-public class Order {
+public class CustomerOrder {
     public enum Status {
         PAYMENT_EXPECTED,
         PAID,
@@ -27,12 +27,12 @@ public class Order {
         this.name = name;
     }
 
-    public String getOrder() {
-        return order;
+    public String getDetails() {
+        return details;
     }
 
-    public void setOrder(String order) {
-        this.order = order;
+    public void setDetails(String details) {
+        this.details = details;
     }
 
     public Status getStatus() {
@@ -52,9 +52,9 @@ public class Order {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int orderNumber;
     private String name;
-    private String order;
+    private String details;
     private Status status;
 }
