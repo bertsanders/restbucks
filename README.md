@@ -19,10 +19,10 @@ project.
 1.  Create a new customerOrder for coffee
 1.  Show all the orders
 1.  Monitor the status of the customerOrder
-1.  Update the customerOrder before it is finished
-1.  Cancel the customerOrder before it is finished
-1.  Pay for the customerOrder
+1.  Update the customerOrder before payment is received
+1.  Delete the customerOrder before it is ready
 1.  Accept the customerOrder (i.e., take the coffee off the counter)
+1.  Pay for the customerOrder
 
 # Technology Overview
 
@@ -38,7 +38,7 @@ project.
 
 ### HTTP Verbs
  - To make an analogy to object-oriented programming, if Resources are objects, verbs represent methods.
- - Define **idempotent**
+ - Define **idempotent** and list which methods are and which are not
  - **GET**
  - **POST**
  - **PUT**
