@@ -59,10 +59,18 @@ public class OrderController {
     private Resource<CustomerOrder> buildResource(CustomerOrder customerOrder) {
         Resource<CustomerOrder> resource = new Resource<>(customerOrder);
         resource.add(new Link("/order/"+  customerOrder.getOrderNumber(), "self"));
-        resource.add(new Link("/order/"+  customerOrder.getOrderNumber() + "/payment", "payment"));
-        resource.add(new Link("/order/"+  customerOrder.getOrderNumber() + "/accept", "accept"));
-        resource.add(new Link("/order/"+  customerOrder.getOrderNumber() + "/prepare", "prepare"));
-        resource.add(new Link("/order/"+  customerOrder.getOrderNumber() + "/complete", "complete"));
+        if (customerOrder.getStatus().equals(CustomerOrder.Status.PAYMENT_EXPECTED))
+            resource.add(new Link("/order/"+  customerOrder.getOrderNumber() + "/payment", "payment"));
+
+        if (customerOrder.getStatus().equals(CustomerOrder.Status.PAID))
+            resource.add(new Link("/order/"+  customerOrder.getOrderNumber() + "/prepare", "prepare"));
+
+        if (customerOrder.getStatus().equals(CustomerOrder.Status.PREPARING))
+            resource.add(new Link("/order/"+  customerOrder.getOrderNumber() + "/complete", "complete"));
+
+        if (customerOrder.getStatus().equals(CustomerOrder.Status.READY))
+            resource.add(new Link("/order/"+  customerOrder.getOrderNumber() + "/accept", "accept"));
+
         return resource;
     }
 
@@ -91,7 +99,7 @@ public class OrderController {
     }
 
     @RequestMapping(path = "/{orderNumber}/accept", method = RequestMethod.PUT,
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public Resource<CustomerOrder> acceptOrder(@PathVariable int orderNumber)
     {
         CustomerOrder customerOrder = lookupOrder(orderNumber).getContent();
@@ -104,7 +112,7 @@ public class OrderController {
     }
 
     @RequestMapping(path = "/{orderNumber}/prepare", method = RequestMethod.PUT,
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public Resource<CustomerOrder> prepareOrder(@PathVariable int orderNumber)
     {
         CustomerOrder customerOrder = lookupOrder(orderNumber).getContent();
@@ -117,7 +125,7 @@ public class OrderController {
     }
 
     @RequestMapping(path = "/{orderNumber}/complete", method = RequestMethod.PUT,
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public Resource<CustomerOrder> completeOrder(@PathVariable int orderNumber)
     {
         CustomerOrder customerOrder = lookupOrder(orderNumber).getContent();
