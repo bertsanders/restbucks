@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by bert on 2/5/17.
@@ -78,6 +79,25 @@ public class OrderController {
         }
         customerOrder.setStatus(CustomerOrder.Status.TAKEN);
         return orderRepository.save(customerOrder);
+    }
+
+    @RequestMapping(path = "/{orderNumber}/payment/", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public CustomerOrder acceptPayment(@PathVariable("orderNumber") int orderNumber, @RequestBody Payment payment)
+    {
+        CustomerOrder customerOrder = orderRepository.findOne(orderNumber);
+        customerOrder.getPayments().add(payment);
+        customerOrder = orderRepository.save(customerOrder);
+
+        BigDecimal payments = customerOrder.getPayments().stream()
+                .map(Payment::getPaymentAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        if (payments.compareTo(customerOrder.getCost()) == 0)
+        {
+            customerOrder.setStatus(CustomerOrder.Status.PAID);
+            customerOrder = orderRepository.save(customerOrder);
+        }
+        return customerOrder;
     }
 
 }

@@ -1,10 +1,9 @@
 package us.bertsanders.restbucks;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by bert on 2/5/17.
@@ -61,12 +60,22 @@ public class CustomerOrder {
         this.cost = cost;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    public List<Payment> getPayments() {
+        return payments;
+    }
 
+    public void setPayments(List<Payment> payments) {
+        this.payments = payments;
+    }
+
+    @Id
+    @GeneratedValue
     private int orderNumber;
     private String name;
     private String details;
     private Status status;
     private BigDecimal cost;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Payment> payments = new ArrayList<>();
 }
