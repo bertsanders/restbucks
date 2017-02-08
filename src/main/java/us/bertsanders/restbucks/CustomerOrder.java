@@ -1,5 +1,7 @@
 package us.bertsanders.restbucks;
 
+import org.springframework.hateoas.ResourceSupport;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
