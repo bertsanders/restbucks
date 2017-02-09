@@ -3,7 +3,7 @@
 Much of this material is adapted from the book 
 [_REST in Practice_]
 (https://read.amazon.com/kp/embed?asin=B0046RERXY&preview=newtab&linkCode=kpe&ref_=cm_sw_r_kb_dp_yH5LybBC9JCGM&tag=tl0a6-20)
-by Jim Webber, Savas Parastadias, and Ian Robinson.  Additional material was sourced from [Martin Fowler's web site](https://martinfowler.com).  Ultimately, REST is the brain-child of Roy Fielding and was first described in his (Ph.D. thesis)[http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm] at UC-Irvine.
+by Jim Webber, Savas Parastadias, and Ian Robinson.  Additional material was sourced from [Martin Fowler's web site](https://martinfowler.com).  Ultimately, REST is the brain-child of Roy Fielding and was first described in his [Ph.D. thesis](http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm) at UC-Irvine.
 
 This example is written using Java and Spring Boot.  It will run in any IDE, but I recommend [IntelliJ IDEA](https://www.jetbrains.com/idea/download/)
 
