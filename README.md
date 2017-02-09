@@ -36,7 +36,7 @@ Build a web service to support the following operations:
 REST stands for Representational State Transfer.  REST seeks to apply the architecture of the web to building
 other types of distributed systems.  We are particularly interested in using the web to implement enterprise application services.  HTTP is the primary application protocol of the internet.  REST leverages HTTP as a mechanism to create web services.
 
-When the web was built, it was designed as a loosely-coupled system to share documents.  The web was adopted by academia, the government, and eventually the business community.  Ultimately, the web is still, at its heart, a means to remotely share documents.  We call these documents **resources**.  We refer to these resources by their **URI** (Uniform Resource Identifier), and these resources have **representations** and **state**.  A resource could represent a web page, but it can also represent so much more.
+When the web was built, it was designed as a loosely-coupled system to share documents.  The web was adopted by academia, the government, and eventually the business community.  Ultimately, the web is still, at its heart, a means to remotely share documents.  We call these documents __resources__.  We refer to these resources by their __URI__ (Uniform Resource Identifier), and these resources have __representations__ and __state__.  A resource could represent a web page, but it can also represent so much more.
 
 ###Why REST?
 
@@ -50,7 +50,7 @@ If we stick to the principles of REST as described, we will create a predictable
 
 ### Resources
 
-**Resources** are the fundamental building blocks of web-based systems.  A resource is “any information that can be named ...: a document or image, a temporal service (e.g. ‘today's weather in Los Angeles’), a collection of other resources, a non-virtual object (e.g. a person), and so on.” (Fielding)  To use a resource, we need to identity it.  We identify resources on the web with a unique identifier called a **URI** (Uniform Resource Identifier).  All URI’s identify a single, unique resource.  However, the same resource can have more than one URI (like like a human can have more than one e-mail address).  Resources also have **representations**, which capture and communicate the current or intended **state** of the resource.
+__Resources__ are the fundamental building blocks of web-based systems.  A resource is “any information that can be named ...: a document or image, a temporal service (e.g. ‘today's weather in Los Angeles’), a collection of other resources, a non-virtual object (e.g. a person), and so on.” (Fielding)  To use a resource, we need to identity it.  We identify resources on the web with a unique identifier called a __URI__ (Uniform Resource Identifier).  All URI’s identify a single, unique resource.  However, the same resource can have more than one URI (like like a human can have more than one e-mail address).  Resources also have __representations__, which capture and communicate the current or intended __state__ of the resource.
 
 An example of a resource is a product on Amazon.  The product is represented by a product web page, which is identified by a URI, for instance 
 https://www.amazon.com/dp/B00X4WHP5E.  
@@ -61,10 +61,10 @@ A resource can be thought of as an Object or an entity (i.e., a noun).  For the 
 
 The state of the resource can be transferred (changed) by an action on that resource.  In HTTP, we perform common actions on a resource by specifying a HTTP request method on the request to the URI.  In REST, we commonly use the following request methods:
 
- - **GET** - the GET method should only be used to request a representation of the resource.  It is only used for retrieval of data and should have no other side-effect.
- - **POST** - the POST method requests that the server accept the entity enclosed in the request as a new subordinate of the web resource identified by the URI.  In other words, you are posting resource representations to the server which are to be accepted into the system.  You usually POST to a resource collection rather than to a specific resource.
- - **PUT** - The PUT method requests that the enclosed entity be stored under the supplied URI. If the URI refers to an already existing resource, it is modified; if the URI does not point to an existing resource, then the server can create the resource with that URI.
- - **DELETE** - The DELETE method deletes the resource represented by the URI.
+ - __GET__ - the GET method should only be used to request a representation of the resource.  It is only used for retrieval of data and should have no other side-effect.
+ - __POST__ - the POST method requests that the server accept the entity enclosed in the request as a new subordinate of the web resource identified by the URI.  In other words, you are posting resource representations to the server which are to be accepted into the system.  You usually POST to a resource collection rather than to a specific resource.
+ - __PUT__ - The PUT method requests that the enclosed entity be stored under the supplied URI. If the URI refers to an already existing resource, it is modified; if the URI does not point to an existing resource, then the server can create the resource with that URI.
+ - __DELETE__ - The DELETE method deletes the resource represented by the URI.
 
 There are others defined, but they are less commonly used.
 
@@ -75,7 +75,7 @@ A safe request is one that is used for information retrieval rather than changin
 
 ####Idempotency
 
-An **idempotent** request is one that can be repeated multiple times, the system having the same state as if it had been sent only once.  In other words, it is one that can be repeated safely.  (Note, this refers to the system state not having changed.  It does not mean that each subsequent request would have the same result.  You may get an error on future requests, but the underlying state of the system is the same).  The idempotent request methods are defined as GET, PUT, and DELETE.  POST is **not** idempotent.
+An __idempotent__ request is one that can be repeated multiple times, the system having the same state as if it had been sent only once.  In other words, it is one that can be repeated safely.  (Note, this refers to the system state not having changed.  It does not mean that each subsequent request would have the same result.  You may get an error on future requests, but the underlying state of the system is the same).  The idempotent request methods are defined as GET, PUT, and DELETE.  POST is __not__ idempotent.
 
 ####PUT vs POST
 
@@ -89,13 +89,13 @@ Another guiding principle if you are still unsure is idempotency.  PUT is idempo
 
 ### REST Hypermedia
 
-If we are to embrace HTTP as an application protocol, we must also embrace **hypermedia**.  Hypermedia is already a ubiquitous part of our lives on the web.  We are used to navigating between resources and manipulating their state by following links and submitting forms.  Despite this ubiquity, it is not as common in computer-to-computer interactions.  
+If we are to embrace HTTP as an application protocol, we must also embrace __hypermedia__.  Hypermedia is already a ubiquitous part of our lives on the web.  We are used to navigating between resources and manipulating their state by following links and submitting forms.  Despite this ubiquity, it is not as common in computer-to-computer interactions.  
 
 To return to our Amazon example, the product web page has links that allow you to view photos of the product, view reviews about the product, and purchase the product.  It may also have links to other related products that might be of interest to the shopper.  When we build a REST web service, we want our resources to have links as well.
 
-When a web service embraces hypermedia links, it is known as **HATEOAS**.  HATEOAS stands for *hypermedia as the engine of application state*.  HATEOAS has many advantages.  It can provide our services with discoverability.  A client only needs to know the main URI to our service.  From there, the client can follow the links to find the rest of the resources and available operations.  This would allow you to change your resource identifier scheme.  As long as your root resource does not change and clients are following links from there, you can change your physical URIs without breaking the client.  (However, you will always run across a client who has “bookmarked”, i.e. hard-coded, a URI.)  HATEOAS can also be used to advertise new available resources.
+When a web service embraces hypermedia links, it is known as __HATEOAS__.  HATEOAS stands for _hypermedia as the engine of application state_.  HATEOAS has many advantages.  It can provide our services with discoverability.  A client only needs to know the main URI to our service.  From there, the client can follow the links to find the rest of the resources and available operations.  This would allow you to change your resource identifier scheme.  As long as your root resource does not change and clients are following links from there, you can change your physical URIs without breaking the client.  (However, you will always run across a client who has “bookmarked”, i.e. hard-coded, a URI.)  HATEOAS can also be used to advertise new available resources.
 
-**See also**: [Richardson Maturity Model](https://martinfowler.com/articles/richardsonMaturityModel.html)
+__See also__: [Richardson Maturity Model](https://martinfowler.com/articles/richardsonMaturityModel.html)
 
 ### Spring REST Further Resources
 
@@ -107,7 +107,7 @@ For this project, we will use Spring REST to create a Java RESTful web service. 
 
 ## Java Persistence API (JPA)
 
-The Java Persistence API (**JPA**) is a Java application programming interface specification that describes the management of relational data in applications using Java.  JPA is an Object-Relational Mapping (**ORM**) tool.  It essentially created a virtual object database within your code and synchronizes changes to that virtual database with the underlying physical database.
+The Java Persistence API (__JPA__) is a Java application programming interface specification that describes the management of relational data in applications using Java.  JPA is an Object-Relational Mapping (__ORM__) tool.  It essentially created a virtual object database within your code and synchronizes changes to that virtual database with the underlying physical database.
 
 ### Spring JPA Further Resources
  - [Spring Data JPA](http://projects.spring.io/spring-data-jpa/)
