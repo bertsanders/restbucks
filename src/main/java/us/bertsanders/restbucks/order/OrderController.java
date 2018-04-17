@@ -24,35 +24,70 @@ import java.util.stream.StreamSupport;
 @RequestMapping("/order")
 @RequiredArgsConstructor
 public class OrderController {
-    @NonNull private OrderRepository orderRepository; //certainly, should have a service layer here, but skip it for the demo
+    @NonNull private OrderService orderService;
 
-    @RequestMapping(path = "/", method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public Resource<CustomerOrder> create(@RequestBody CustomerOrder customerOrder)
     {
-        customerOrder.setStatus(CustomerOrder.Status.PAYMENT_EXPECTED);
-        customerOrder.setCost(BigDecimal.valueOf(5));
-        return buildResource(orderRepository.save(customerOrder));
+        return buildResource(orderService.create(customerOrder));
     }
 
-    @RequestMapping(path = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resources<Resource<CustomerOrder>> lookupAll()
     {
-        Iterable<CustomerOrder> orders = orderRepository.findAll();
+        Iterable<CustomerOrder> orders = orderService.lookupAll();
         List<Resource<CustomerOrder>> resourceList = StreamSupport.stream(orders.spliterator(), false).map(o -> buildResource(o))
                 .collect(Collectors.toList());
 
         Resources<Resource<CustomerOrder>> resources = new Resources<>(resourceList);
-        resources.add(new Link("/order", "self"));
+        resources.add(new Link("/order/", "self"));
         return resources;
     }
 
-    @RequestMapping(path = "/{orderNumber}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{orderNumber}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Resource<CustomerOrder> lookupOrder(@PathVariable int orderNumber)
     {
-        CustomerOrder customerOrder = orderRepository.findOne(orderNumber);
+        CustomerOrder customerOrder = orderService.findByOrderNumber(orderNumber);
         Resource<CustomerOrder> resource = buildResource(customerOrder);
         return resource;
+    }
+
+    @RequestMapping(path = "/{orderNumber}", method = RequestMethod.PUT,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Resource<CustomerOrder> updateOrder(@PathVariable int orderNumber, @RequestBody CustomerOrder customerOrder)
+    {
+        return buildResource(orderService.updateOrder(orderNumber, customerOrder));
+    }
+
+    @DeleteMapping(path = "/{orderNumber}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void deleteOrder(@PathVariable int orderNumber)
+    {
+        orderService.deleteOrder(orderNumber);
+    }
+
+    @PutMapping(path = "/{orderNumber}/accept", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Resource<CustomerOrder> acceptOrder(@PathVariable int orderNumber)
+    {
+        return buildResource(orderService.acceptOrder(orderNumber));
+    }
+
+    @PutMapping(path = "/{orderNumber}/prepare", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Resource<CustomerOrder> prepareOrder(@PathVariable int orderNumber)
+    {
+        return buildResource(orderService.prepareOrder(orderNumber));
+    }
+
+    @PutMapping(path = "/{orderNumber}/complete", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Resource<CustomerOrder> completeOrder(@PathVariable int orderNumber)
+    {
+        return buildResource(orderService.completeOrder(orderNumber));
+    }
+
+    @RequestMapping(path = "/{orderNumber}/payment", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Resource<CustomerOrder> acceptPayment(@PathVariable("orderNumber") int orderNumber, @RequestBody Payment payment)
+    {
+        return buildResource(orderService.acceptPayment(orderNumber, payment));
     }
 
     private Resource<CustomerOrder> buildResource(CustomerOrder customerOrder) {
@@ -73,86 +108,5 @@ public class OrderController {
         return resource;
     }
 
-    @RequestMapping(path = "/{orderNumber}", method = RequestMethod.PUT,
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resource<CustomerOrder> updateOrder(@PathVariable int orderNumber, @RequestBody CustomerOrder customerOrder)
-    {
-        CustomerOrder existingOrder = lookupOrder(orderNumber).getContent();
-        if (!existingOrder.getStatus().equals(CustomerOrder.Status.PAYMENT_EXPECTED))
-        {
-            throw new IllegalStateException("Cannot modify an order after payment is received");
-        }
-        customerOrder.setOrderNumber(orderNumber);
-        return buildResource(orderRepository.save(customerOrder));
-    }
-
-    @RequestMapping(path = "/{orderNumber}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void deleteOrder(@PathVariable int orderNumber)
-    {
-        CustomerOrder existingOrder = lookupOrder(orderNumber).getContent();
-        if (existingOrder.getStatus().equals(CustomerOrder.Status.TAKEN))
-        {
-            throw new IllegalStateException("Cannot delete an order after it is taken");
-        }
-        orderRepository.delete(orderNumber);
-    }
-
-    @RequestMapping(path = "/{orderNumber}/accept", method = RequestMethod.PUT,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resource<CustomerOrder> acceptOrder(@PathVariable int orderNumber)
-    {
-        CustomerOrder customerOrder = lookupOrder(orderNumber).getContent();
-        if (!customerOrder.getStatus().equals(CustomerOrder.Status.READY))
-        {
-            throw new IllegalStateException("Cannot accept an order that is not ready");
-        }
-        customerOrder.setStatus(CustomerOrder.Status.TAKEN);
-        return buildResource(orderRepository.save(customerOrder));
-    }
-
-    @RequestMapping(path = "/{orderNumber}/prepare", method = RequestMethod.PUT,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resource<CustomerOrder> prepareOrder(@PathVariable int orderNumber)
-    {
-        CustomerOrder customerOrder = lookupOrder(orderNumber).getContent();
-        if (!customerOrder.getStatus().equals(CustomerOrder.Status.PAID))
-        {
-            throw new IllegalStateException("Cannot prepare an order that has not been paid");
-        }
-        customerOrder.setStatus(CustomerOrder.Status.PREPARING);
-        return buildResource(orderRepository.save(customerOrder));
-    }
-
-    @RequestMapping(path = "/{orderNumber}/complete", method = RequestMethod.PUT,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resource<CustomerOrder> completeOrder(@PathVariable int orderNumber)
-    {
-        CustomerOrder customerOrder = lookupOrder(orderNumber).getContent();
-        if (!customerOrder.getStatus().equals(CustomerOrder.Status.PREPARING))
-        {
-            throw new IllegalStateException("Cannot complete an order that has is not preparing");
-        }
-        customerOrder.setStatus(CustomerOrder.Status.READY);
-        return buildResource(orderRepository.save(customerOrder));
-    }
-
-    @RequestMapping(path = "/{orderNumber}/payment", method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resource<CustomerOrder> acceptPayment(@PathVariable("orderNumber") int orderNumber, @RequestBody Payment payment)
-    {
-        CustomerOrder customerOrder = orderRepository.findOne(orderNumber);
-        customerOrder.getPayments().add(payment);
-        customerOrder = orderRepository.save(customerOrder);
-
-        BigDecimal payments = customerOrder.getPayments().stream()
-                .map(Payment::getPaymentAmount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        if (payments.compareTo(customerOrder.getCost()) == 0)
-        {
-            customerOrder.setStatus(CustomerOrder.Status.PAID);
-            customerOrder = orderRepository.save(customerOrder);
-        }
-        return buildResource(customerOrder);
-    }
 
 }
