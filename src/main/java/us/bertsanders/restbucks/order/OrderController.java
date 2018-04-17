@@ -1,11 +1,15 @@
-package us.bertsanders.restbucks;
+package us.bertsanders.restbucks.order;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import us.bertsanders.restbucks.model.CustomerOrder;
+import us.bertsanders.restbucks.model.Payment;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,14 +22,9 @@ import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("/order")
+@RequiredArgsConstructor
 public class OrderController {
-    @Autowired private OrderRepository orderRepository;
-
-    @RequestMapping(path = "/hello")
-    public String hello()
-    {
-        return "hello";
-    }
+    @NonNull private OrderRepository orderRepository; //certainly, should have a service layer here, but skip it for the demo
 
     @RequestMapping(path = "/", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

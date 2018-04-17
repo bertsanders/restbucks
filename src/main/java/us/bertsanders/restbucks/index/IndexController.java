@@ -1,4 +1,4 @@
-package us.bertsanders.restbucks;
+package us.bertsanders.restbucks.index;
 
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resources;
@@ -21,7 +21,7 @@ public class IndexController {
     public Resources<String> index()
     {
         Resources<String> resources = new Resources<>(new ArrayList<>(),
-                new Link("/order", "order"));
+                new Link("/order/", "order"));
         return resources;
     }
 }
