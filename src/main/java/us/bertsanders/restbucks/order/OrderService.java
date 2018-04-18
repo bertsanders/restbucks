@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import us.bertsanders.restbucks.model.CustomerOrder;
+import us.bertsanders.restbucks.model.OverpaymentException;
 import us.bertsanders.restbucks.model.Payment;
 
 import javax.transaction.Transactional;
@@ -88,7 +89,11 @@ class OrderService {
             customerOrder.setStatus(CustomerOrder.Status.PAID);
             customerOrder = orderRepository.save(customerOrder);
         }
-        //TODO on overpayment, rollback transaction and generate bad request
+        else if (payments.compareTo(customerOrder.getCost()) > 0) {
+            BigDecimal overpayment = payments.subtract(customerOrder.getCost());
+            throw new OverpaymentException("Payment resulted in an overpayment of " + overpayment.toString() +
+                    " and change cannot be dispensed at this time.");
+        }
         return customerOrder;
     }
 }
