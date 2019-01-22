@@ -31,14 +31,14 @@ Restbucks is a web service for a fictional coffee shop.  We will build a web ser
 
 ## REST
 
-###What is REST?
+### What is REST?
 
 REST stands for Representational State Transfer.  REST seeks to apply the architecture of the web to building
 other types of distributed systems.  We are particularly interested in using the web to implement enterprise application services.  HTTP is the primary application protocol of the internet.  REST leverages HTTP as a mechanism to create web services.
 
 When the web was built, it was designed as a loosely-coupled system to share documents.  The web was adopted by academia, the government, and eventually the business community.  Ultimately, the web is still, at its heart, a means to remotely share documents.  We call these documents __resources__.  We refer to these resources by their __URI__ (Uniform Resource Identifier), and these resources have __representations__ and __state__.  A resource could represent a web page, but it can also represent so much more.
 
-###Why REST?
+### Why REST?
 
 According to Fielding, “REST provides a set of architectural constraints that, when applied as a whole, emphasizes scalability of component interactions, generality of interfaces, independent deployment of components, and intermediary components to reduce interaction latency, enforce security, and encapsulate legacy systems.”
 
@@ -70,14 +70,14 @@ There are others defined, but they are less commonly used.
 
 HTTP Request Methods can be thought of as the verbs of the system.  Since our REST URIs do not contain verbs, we use the HTTP Request Method as the verb to effect change of state on the resource.
 
-####Safe requests
+#### Safe requests
 A safe request is one that is used for information retrieval rather than changing the state of the resource.  Of the ones mentioned above, GET is the safe request method.  All others are used to change the state of the resource.
 
-####Idempotency
+#### Idempotency
 
 An __idempotent__ request is one that can be repeated multiple times, the system having the same state as if it had been sent only once.  In other words, it is one that can be repeated safely.  (Note, this refers to the system state not having changed.  It does not mean that each subsequent request would have the same result.  You may get an error on future requests, but the underlying state of the system is the same).  The idempotent request methods are defined as GET, PUT, and DELETE.  POST is __not__ idempotent.
 
-####PUT vs POST
+#### PUT vs POST
 
 Choosing the right HTTP Method can often be difficult.  It is important to adhere to the definitions of each method and the principles of idempotency.  These are part of the HTTP spec.  Violating this can create surprises for our clients and cause them to make unintended changes to our system.  This is not a good situation for either party and should be avoided at all costs.  
 
